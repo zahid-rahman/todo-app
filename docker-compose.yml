@@ -1,0 +1,9 @@
+version: "3.1"
+services:
+    mongo:
+        container_name: todo_db
+        image: mongo
+        volumes:
+            - ./todo_db:/data/db
+        ports:
+            - "27017:27017"

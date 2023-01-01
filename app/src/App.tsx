@@ -12,9 +12,9 @@ function App() {
   useEffect(() => {
     async function getAllTodoList() {
       const response = await fetch('http://localhost:8000/api/todo/all')
-      const data = await response.json();
-      console.log(data);
-      setData(data)
+      const result = await response.json();
+      console.log(result);
+      setData(result.data)
     }
     getAllTodoList()
   }, []);
