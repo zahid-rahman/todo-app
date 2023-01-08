@@ -1,38 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import InputBox from './ui/InputBox';
-import Button from './ui/Button';
-import Todos from './components/Todos';
+import axios from 'axios';
+import { SWRConfig } from 'swr';
+import MainApp from './components/MainApp';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import List from './components/List';
+import TodoDetails from './components/TodoDetails';
+import Header from './components/Header';
+import Nav from './ui/Nav';
 
 function App() {
-
-  const [data, setData] = useState([])
-
-  useEffect(() => {
-    async function getAllTodoList() {
-      const response = await fetch('http://localhost:8000/api/todo/all')
-      const result = await response.json();
-      console.log(result);
-      setData(result.data)
-    }
-    getAllTodoList()
-  }, []);
-
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-center p-4">
-        Todo app
-      </h1>
-      <div className="text-center">
-        <InputBox type="text" placeholder="Enter item"/>
-        <Button onClick={() => alert('clicked')}>Add</Button>
-      </div>
+    <>
+      <SWRConfig value={{ fetcher: (url: string) => axios(url).then(r => r.data) }}>
+        <BrowserRouter>
+          <Header></Header>
+          <Nav />
+          <Routes>
+            <Route path="/" element={<MainApp />} />
+            <Route path="/todo/list" element={<List />} />
+            <Route path="*" element={<>
+              <p>404 page not found</p>
+              <Link to='/'>click here to back in home page</Link>
+            </>} />
+            <Route path="/todo/:id" element={<TodoDetails />} />
+          </Routes>
+        </BrowserRouter>
+      </SWRConfig>
+    </>
 
-      <div className="flex flex-col p-2">
-        <Todos todos={data}/>
-      </div>
-    </div>
   );
 }
 
