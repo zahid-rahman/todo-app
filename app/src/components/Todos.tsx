@@ -30,7 +30,7 @@ export default function Todos({ todos }: TodosProps) {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {todos.map((todo, index) => (
-                    <Todo id={todo.id} title={todo.title} description={todo.description} index={index} />
+                    <Todo id={todo.id} title={todo.title} description={todo.description} index={index} todos={todos}/>
                   ))}
                 </tbody>
               </table>
