@@ -2,10 +2,12 @@ import React, { useContext } from 'react'
 import { Layout, Menu, Typography } from 'antd';
 import { BaseLayoutContext } from './BaseLayout';
 import {
+    UnorderedListOutlined,
     UploadOutlined,
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
+import { sidebarItems } from '@/constants/sidebarItems';
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -26,23 +28,7 @@ function Sidebar() {
                     style={{
                         margin: "20px 0px"
                     }}
-                    items={[
-                        {
-                            key: '1',
-                            icon: <UserOutlined />,
-                            label: 'nav 1',
-                        },
-                        {
-                            key: '2',
-                            icon: <VideoCameraOutlined />,
-                            label: 'nav 2',
-                        },
-                        {
-                            key: '3',
-                            icon: <UploadOutlined />,
-                            label: 'nav 3',
-                        },
-                    ]}
+                    items={sidebarItems}
                 />
             </Sider>
         </>

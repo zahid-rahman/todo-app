@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "18.15.12",
     "@types/react": "18.0.37",
@@ -20,6 +21,7 @@
     "next": "13.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
     "react-redux": "^8.0.5",
     "react-spinner": "^0.2.7",
     "redux": "^4.2.1",
