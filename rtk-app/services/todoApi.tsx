@@ -5,33 +5,33 @@ export const todoApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3303/api/todo" }),
     tagTypes: ['Todo'],
     endpoints: (builder) => ({
-        todos: builder.query<any[], void>({
+        todos: builder.query<any, void>({
             query: () => '/find-all',
             providesTags: ['Todo']
         }),
-        todo: builder.query<any, string>({
-            query: (id) => `/find/${ id }`,
+        todo: builder.query<any, any>({
+            query: (id: any) => `/find/${id}`,
             providesTags: ['Todo']
         }),
         addTodo: builder.mutation<{}, any>({
-            query: contact => ({
+            query: todo => ({
                 url: '/create',
                 method: 'POST',
-                body: contact    
+                body: todo
             }),
-            invalidatesTags: ['Todo']
+            invalidatesTags: ['Todo'],
         }),
         updateTodo: builder.mutation<void, any>({
-            query: ({id, ...rest}) => ({
-                url: `/update/${ id }`,
+            query: ({ id, ...rest }) => ({
+                url: `/update/${id}`,
                 method: 'PUT',
                 body: rest
             }),
             invalidatesTags: ['Todo']
         }),
         deleteTodo: builder.mutation<void, string>({
-            query: (id) => ({
-                url: `/delete/${ id }`,
+            query: (id: any) => ({
+                url: `/delete/${id}`,
                 method: 'DELETE',
             }),
             invalidatesTags: ['Todo']
