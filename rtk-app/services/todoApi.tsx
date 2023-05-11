@@ -1,8 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { HYDRATE } from 'next-redux-wrapper';
 
 export const todoApi = createApi({
     reducerPath: "todoApi",
     baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3303/api/todo" }),
+    extractRehydrationInfo(action, { reducerPath }) {
+        if (action.type === HYDRATE) {
+          return action.payload[reducerPath]
+        }
+      },
     tagTypes: ['Todo'],
     endpoints: (builder) => ({
         todos: builder.query<any, void>({
@@ -46,3 +52,4 @@ export const {
     useUpdateTodoMutation,
     useDeleteTodoMutation
 } = todoApi;
+

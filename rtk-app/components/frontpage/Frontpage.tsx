@@ -61,14 +61,16 @@ function Frontpage() {
     },
     async onSubmit(values, action) {
       try {
-        await addTodo(values);
-        notifySuccess("todo added successfully");
+        const result = await addTodo(values).unwrap();
+        console.log(result)
+        // notifySuccess("todo added successfully");
         action.resetForm();
       }
       catch (error) {
         console.error(error);
         notifyError("something went wrong")
       }
+   
     }
   });
 
