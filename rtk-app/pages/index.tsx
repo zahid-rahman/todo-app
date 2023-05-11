@@ -1,6 +1,6 @@
 import { todoApi, useAddTodoMutation, useDeleteTodoMutation, useTodoQuery, useTodosQuery } from '@/services/todoApi'
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Input, Button, Space, Table, Tag } from 'antd';
 import { } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
@@ -11,14 +11,28 @@ import Head from 'next/head';
 import { store } from '@/store';
 import { useRouter } from 'next/router';
 
-function Frontpage({ data: todos }: any) {
+function Frontpage({ todoList }: any) {
+  // console.log('server side data', todos?.data)
+  const [theData, setTheData] = React.useState(todoList);
   const router = useRouter();
   const [addTodo] = useAddTodoMutation();
   const [deleteTodo] = useDeleteTodoMutation()
   const [open, setOpen] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<string>("");
+  const { data = theData } = useTodosQuery();
 
-  const { data = todos } = useTodosQuery();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const refreshData = () => {
+    router.replace(router.asPath);
+    setIsRefreshing(true);
+    setTheData(todoList)
+  };
+
+  React.useEffect(() => {
+    setIsRefreshing(false);
+  }, [theData]);
+
+  console.log("server side data",todoList?.data)
 
 
   const columns: ColumnsType<any> = [
@@ -69,6 +83,9 @@ function Frontpage({ data: todos }: any) {
       try {
         await addTodo(values).unwrap();
         notifySuccess("todo added successfully");
+        // todoApi.endpoints.todos;
+        // refetch();
+        refreshData()
         action.resetForm();
       }
       catch (error) {
@@ -81,6 +98,7 @@ function Frontpage({ data: todos }: any) {
   const deleteTodoHandler = async (id: string) => {
     try {
       await deleteTodo(id);
+      refreshData()
       notifySuccess('todo deleted successfully');
     }
     catch (error) {
@@ -131,19 +149,16 @@ function Frontpage({ data: todos }: any) {
 export default Frontpage;
 
 export async function getServerSideProps(ctx: any) {
-  // const { res } = ctx;
-  // res.setHeader(
-  //   'Cache-Control',
-  //   'public, s-maxage=10, stale-while-revalidate=59'
-  // )
   const action = todoApi.endpoints.todos.initiate();
   const result = await store.dispatch(action);
-  const postsState = todoApi.endpoints.todos.select()(store.getState());
-  const todos = JSON.parse(JSON.stringify(postsState));
+  const todosState = todoApi.endpoints.todos.select()(store.getState());
+  const todos = JSON.parse(JSON.stringify(todosState));
+
+  console.log(todos.data);
 
   return {
     props: {
-      data: todos.data
+      todoList: todos.data
     },
   }
 }
