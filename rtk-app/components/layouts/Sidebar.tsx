@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { Layout, Menu, Typography } from 'antd';
+import React, { useContext, useState } from 'react'
+import { Layout, Menu, MenuProps, Typography } from 'antd';
 import { BaseLayoutContext } from './BaseLayout';
 import {
     UnorderedListOutlined,
@@ -7,13 +7,22 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
+import { useSidebar } from '@/hooks/useSidebar';
 import { sidebarItems } from '@/constants/sidebarItems';
+import { useRouter } from 'next/router';
 
 const { Sider } = Layout;
 const { Title } = Typography;
 
 function Sidebar() {
     const { collapsed } = useContext(BaseLayoutContext);
+    // const { sidebarItems } = useSidebar()
+    const router = useRouter()
+    const [current, setCurrent] = useState(router.pathname);
+    const onClick: MenuProps['onClick'] = (e) => {
+        console.log('click ', e);
+        setCurrent(e.key);
+      };
     return (
         <>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -24,7 +33,8 @@ function Sidebar() {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={['1']}
+                    onClick={onClick}
+                    selectedKeys={[current]}
                     style={{
                         margin: "20px 0px"
                     }}

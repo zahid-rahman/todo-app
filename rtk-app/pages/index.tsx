@@ -148,17 +148,17 @@ function Frontpage({ todoList }: any) {
 
 export default Frontpage;
 
-export async function getServerSideProps(ctx: any) {
-  const action = todoApi.endpoints.todos.initiate();
-  const result = await store.dispatch(action);
-  const todosState = todoApi.endpoints.todos.select()(store.getState());
-  const todos = JSON.parse(JSON.stringify(todosState));
+// export async function getServerSideProps(ctx: any) {
+//   const action = todoApi.endpoints.todos.initiate();
+//   const result = await store.dispatch(action);
+//   const todosState = todoApi.endpoints.todos.select()(store.getState());
+//   const todos = JSON.parse(JSON.stringify(todosState));
 
-  console.log(todos.data);
+//   console.log(todos.data);
 
-  return {
-    props: {
-      todoList: todos.data
-    },
-  }
-}
+//   return {
+//     props: {
+//       todoList: todos.data
+//     },
+//   }
+// }
